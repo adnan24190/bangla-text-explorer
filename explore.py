@@ -1,11 +1,15 @@
 import pandas as pd
-df = pd.read_csv("data.csv")
-print(df) 
-print(df.shape)
-print(df['text'])
-df['text_length'] = df['text'].str.len()
-print(df)
-positive_df = df[df['label'] == 'positive']
-print(positive_df)
-df.to_csv("processed_data.csv", index=False)
-print("Data processing complete. Processed data saved to 'processed_data.csv'.")
+
+# 1. Ingestion
+df = pd.read_csv("test set.csv")
+print("Original matrix dimensions:", df.shape)
+
+# 2. Feature Engineering
+df['prompt_length'] = df['prompt_bn'].str.len()
+
+# 3. Filtering
+null_context_df = df[df['context'] == '[NULL]']
+
+# 4. Export
+null_context_df.to_csv("processed_test_set.csv", index=False)
+print("Filtered matrix dimensions:", null_context_df.shape)
