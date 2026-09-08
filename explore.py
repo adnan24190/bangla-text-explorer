@@ -1,15 +1,22 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# 1. Ingestion
-df = pd.read_csv("test set.csv")
-print("Original matrix dimensions:", df.shape)
+# 1. Ingestion: Load your cleanly filtered matrix back into RAM
+df = pd.read_csv("processed_test_set.csv")
 
-# 2. Feature Engineering
-df['prompt_length'] = df['prompt_bn'].str.len()
+# 2. Visualization: Command pandas to draw a histogram with 20 bins (bars)
+df['prompt_length'].plot(kind='hist', bins=20, title='Distribution of Bengali Prompt Lengths', color='blue')
 
-# 3. Filtering
-null_context_df = df[df['context'] == '[NULL]']
+# 3. Export: Save the drawing from temporary RAM to a permanent image file
+plt.savefig('length_chart.png')
+print("Visualization complete. Chart saved as length_chart.png!")
 
-# 4. Export
-null_context_df.to_csv("processed_test_set.csv", index=False)
-print("Filtered matrix dimensions:", null_context_df.shape)
+# 4. Data Cleaning: Drop any row containing 'svg' image code
+clean_df = df[~df['prompt_bn'].str.contains('svg', na=False)]
+
+print("Rows before cleaning:", len(df))
+print("Rows after cleaning:", len(clean_df))
+
+# 5. Final Export
+clean_df.to_csv("final_clean_dataset.csv", index=False)
+print("Final cleaned dataset saved as final_clean_dataset.csv!")
